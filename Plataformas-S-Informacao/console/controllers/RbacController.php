@@ -101,6 +101,13 @@ class RbacController extends Controller
         $gerirGestores->description = 'Criar e gerir contas de gestores de museu';
         $auth->add($gerirGestores);
 
+        $acederBackoffice = $auth->createPermission('acederBackoffice');
+        $acederBackoffice->description = 'Aceder ao back-office';
+        $auth->add($acederBackoffice);
+
+        $gerirUtilizadores = $auth->createPermission('gerirUtilizadores');
+        $gerirUtilizadores->description = 'Gestão de utilizadores (CRUD com Soft Delete)';
+        $auth->add($gerirUtilizadores);
 
         // ==========================================
         // 2. CRIAÇÃO DOS ROLES E ASSOCIAÇÃO
@@ -113,7 +120,7 @@ class RbacController extends Controller
         $auth->addChild($visitante, $pesquisarCatalogo);
         $auth->addChild($visitante, $verObras);
         $auth->addChild($visitante, $verLembrancas);
-        $auth->addChild($visitante, $encomendarLembrancas);
+
 
         // Visitante Registado (Web & App)
         $visitanteRegistado = $auth->createRole('visitante_registado');
@@ -124,6 +131,7 @@ class RbacController extends Controller
         $auth->addChild($visitanteRegistado, $verRecompensas);
         $auth->addChild($visitanteRegistado, $digitalizarObras);
         $auth->addChild($visitanteRegistado, $verMapa);
+        $auth->addChild($visitanteRegistado, $encomendarLembrancas);
 
         // Colaborador (Back-Office)
         $colaborador = $auth->createRole('colaborador');
@@ -134,6 +142,7 @@ class RbacController extends Controller
         $auth->addChild($colaborador, $verLembrancas);
         $auth->addChild($colaborador, $verTurnosProprios);
         $auth->addChild($colaborador, $criarVerificacaoDiaria);
+        $auth->addChild($colaborador, $acederBackoffice);
 
         // Gestor de Museu (Back-Office)
         $gestor = $auth->createRole('gestor');
@@ -154,6 +163,10 @@ class RbacController extends Controller
         $auth->addChild($admin, $verLembrancas);
         $auth->addChild($admin, $gerirMuseus);
         $auth->addChild($admin, $gerirGestores);
+        $auth->addChild($admin, $acederBackoffice);
+        $auth->addChild($admin, $gerirUtilizadores);
+
+        $auth->assign($admin, 1);
 
         $this->stdout("RBAC inicializado com sucesso!\n");
 
