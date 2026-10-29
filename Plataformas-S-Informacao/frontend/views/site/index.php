@@ -1,209 +1,124 @@
 <?php
 
-declare(strict_types=1);
-
 /** @var yii\web\View $this */
 
 use yii\helpers\Html;
 
-$this->title = 'My Yii Application';
-$this->params['meta_description'] = 'A high-performance PHP framework best for developing web applications. Fast, secure, and professional.';
-$this->params['meta_keywords'] = 'yii, yii2, php, framework, web application, high-performance';
+$this->title = 'InforMuseus';
+$this->params['fullWidth'] = true; // esta página gere os seus próprios containers
+
+// DADOS DE EXEMPLO: mais tarde isto vem da BD (controller -> view).
+// Imagens em web/img/museus/ (ilustrações); podes trocar por fotos reais com o mesmo nome
+$catalogo = [
+    ['nome' => 'Museu do Louvre', 'local' => 'Paris, França',   'img' => 'img/museus/louvre.jpg'],
+    ['nome' => 'Coliseu',         'local' => 'Roma, Itália',    'img' => 'img/museus/coliseu.jpg'],
+    ['nome' => 'Museu do Prado',  'local' => 'Madrid, Espanha', 'img' => 'img/museus/prado.jpg'],
+];
+
+$destaque = [
+    'nome'  => 'Museu Nacional de Arte Antiga',
+    'local' => 'Lisboa, Portugal',
+    'desc'  => 'Coleções que contam séculos de história, arte e cultura.',
+    'img'   => 'img/museus/mnaa.jpg',
+];
 ?>
-<div class="site-index">
 
-    <!-- Hero banner with Yii gradient -->
-    <div class="hero-banner text-white rounded-4 p-5 mb-4 position-relative overflow-hidden">
-        <?= Html::img(Yii::getAlias('@web/images/yii3_full_white_for_dark.svg'), [
-            'alt' => '',
-            'class' => 'd-none d-lg-block position-absolute hero-logo',
-        ]) ?>
-        <div class="position-relative">
-            <h1 class="display-5 fw-bold mb-3">Build with Yii Framework</h1>
-            <p class="lead opacity-75 mb-4 hero-lead">
-                A high-performance PHP framework best for developing web applications.
-                Fast, secure, and professional.
-            </p>
-            <div class="d-flex gap-2 flex-wrap">
-                <?= Html::a(
-                    'Get Started',
-                    'https://www.yiiframework.com/doc/guide/2.0/en/start-installation',
-                    [
-                        'class' => 'btn btn-light btn-lg fw-semibold px-4',
-                        'rel' => 'noopener',
-                        'target' => '_blank',
-                    ],
-                ) ?>
-                <?= Html::a(
-                    'API Reference',
-                    'https://www.yiiframework.com/doc/api/2.0',
-                    [
-                        'class' => 'btn btn-outline-light btn-lg px-4',
-                        'rel' => 'noopener',
-                        'target' => '_blank',
-                    ],
-                ) ?>
+<!-- 1. Pesquisa e filtros -->
+<section class="im-search">
+    <div class="container">
+        <?= Html::beginForm(['/site/index'], 'get') ?>
+        <div class="im-search-row">
+            <label class="im-search-box">
+                <i class="fas fa-search"></i>
+                <input type="search" name="q"
+                       placeholder="Pesquisar museus, monumentos, cidades…"
+                       value="<?= Html::encode(Yii::$app->request->get('q')) ?>">
+            </label>
+            <button type="button" class="im-btn-gold" data-bs-toggle="collapse" data-bs-target="#imFiltros"
+                    aria-expanded="false" aria-controls="imFiltros">
+                Filtros <i class="fas fa-sliders-h ms-1"></i>
+            </button>
+        </div>
+
+        <div class="collapse" id="imFiltros">
+            <div class="im-filtros row g-2">
+                <div class="col-md-5">
+                    <select name="pais" class="form-select">
+                        <option value="">País</option>
+                        <option>Portugal</option>
+                        <option>Espanha</option>
+                        <option>França</option>
+                        <option>Itália</option>
+                    </select>
+                </div>
+                <div class="col-md-5">
+                    <select name="tipo" class="form-select">
+                        <option value="">Tipo</option>
+                        <option value="museu">Museu</option>
+                        <option value="monumento">Monumento</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="im-btn-gold w-100">Aplicar</button>
+                </div>
             </div>
         </div>
+        <?= Html::endForm() ?>
     </div>
+</section>
 
-    <!-- Extensions grid -->
-    <div class="row g-3">
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon">&#128270;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-debug</h3>
+<div class="container">
+    <div class="im-panel">
+
+        <!-- 2. Catálogo internacional -->
+        <div class="row g-4">
+            <?php foreach ($catalogo as $m): ?>
+                <div class="col-md-4">
+                    <a href="#" class="im-card">
+                        <?= Html::img('@web/' . $m['img'], ['alt' => $m['nome']]) ?>
+                        <h3><?= Html::encode($m['nome']) ?></h3>
+                        <p><?= Html::encode($m['local']) ?></p>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- 3. Preview do espaço -->
+        <article class="im-feature row g-0">
+            <div class="col-md-6">
+                <?= Html::img('@web/' . $destaque['img'], ['alt' => $destaque['nome']]) ?>
+            </div>
+            <div class="col-md-6 im-feature-body">
+                <h2><?= Html::encode($destaque['nome']) ?></h2>
+                <div class="im-local"><i class="fas fa-map-marker-alt"></i> <?= Html::encode($destaque['local']) ?></div>
+                <p><?= Html::encode($destaque['desc']) ?></p>
+                <a href="#" class="im-link">Ver detalhes</a>
+            </div>
+        </article>
+
+        <!-- 4. Bilhetes e lembranças -->
+        <div class="row g-4 mt-1">
+            <div class="col-md-6" id="bilhetes">
+                <a href="#" class="im-action">
+                    <div class="im-action-icon navy"><i class="fas fa-ticket-alt"></i></div>
+                    <div class="im-action-body">
+                        <h3>Bilhetes</h3>
+                        <p>Compre bilhetes<br>para exposições.</p>
+                        <i class="fas fa-arrow-right"></i>
                     </div>
-                    <p class="text-body-secondary small mb-0">
-                        Debug toolbar and debugger for Yii2. Inspect logs, database queries,
-                        request data, and application performance in real time.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-debug',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
-                </div>
+                </a>
+            </div>
+            <div class="col-md-6" id="lembrancas">
+                <a href="#" class="im-action">
+                    <div class="im-action-icon gold"><i class="fas fa-shopping-bag"></i></div>
+                    <div class="im-action-body">
+                        <h3>Lembranças</h3>
+                        <p>Descubra recordações<br>exclusivas.</p>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </a>
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon">&#9881;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-gii</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Automatic code generator for models, controllers, CRUD, forms, and modules.
-                        Boost your productivity with scaffolding.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-gii',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon">&#128203;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-queue</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Asynchronous job queue with support for DB, Redis, AMQP, Beanstalk,
-                        and SQS drivers. Run background tasks with ease.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-queue',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ]
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon">&#9889;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-redis</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Redis integration providing cache, session, and ActiveRecord support.
-                        Leverage in-memory storage for blazing-fast data access.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-redis',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ]
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon">&#128269;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-elasticsearch</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Elasticsearch integration with ActiveRecord and query builder.
-                        Add powerful full-text search capabilities to your application.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-elasticsearch',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ]
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon">&#9993;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-symfonymailer</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Email sending integration powered by Symfony Mailer.
-                        Compose and deliver rich HTML emails with attachments and templates.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://github.com/yiisoft/yii2-symfonymailer',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ]
-                    ) ?>
-                </div>
-            </div>
-        </div>
     </div>
-
 </div>
