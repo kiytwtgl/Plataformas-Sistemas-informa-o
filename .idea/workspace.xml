@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aca4b7e8-7751-43d8-ba81-69c8e12390b8" name="Changes" comment="" />
+    <list default="true" id="aca4b7e8-7751-43d8-ba81-69c8e12390b8" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -21,7 +24,7 @@
     <commands />
     <urls />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\wamp64\bin\php\php8.4.15\php.exe">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="$PROJECT_DIR$/../../bin/php/php8.0.30/php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/complexity" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/diff" />
@@ -117,6 +120,7 @@
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/ralouphie/getallheaders" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/cli-parser" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/masterminds/html5" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -169,11 +173,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1792702373725</updated>
+<<<<<<< Updated upstream
       <workItem from="1792702374968" duration="1845000" />
       <workItem from="1792704905628" duration="470000" />
       <workItem from="1793304422422" duration="2396000" />
       <workItem from="1793310285719" duration="1000" />
       <workItem from="1793310303378" duration="647000" />
+=======
+      <workItem from="1792702374968" duration="1733000" />
+      <workItem from="1793307878846" duration="3571000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
