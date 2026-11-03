@@ -106,9 +106,12 @@
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/ralouphie/getallheaders" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/cli-parser" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/comparator" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/masterminds/html5" />
     </include_path>
   </component>
-  <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
+  <component name="PhpProjectSharedConfiguration" php_language_level="8.5">
+    <option name="suggestChangeDefaultLanguageLevel" value="false" />
+  </component>
   <component name="PhpStan">
     <PhpStan_settings>
       <PhpStanConfiguration tool_path="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/bin/phpstan" />
