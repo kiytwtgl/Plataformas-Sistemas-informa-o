@@ -7,8 +7,16 @@
     <option name="transferred" value="true" />
   </component>
   <component name="PHPCodeSnifferOptionsConfiguration">
+    <option name="codingStandard" value="Yii2" />
     <option name="highlightLevel" value="WARNING" />
+    <option name="installedPaths" value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/yiisoft/yii2-coding-standards" />
+    <option name="useInstalledPaths" value="true" />
     <option name="transferred" value="true" />
+  </component>
+  <component name="PhpCodeSniffer">
+    <phpcs_settings>
+      <PhpCSConfiguration beautifier_path="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/bin/phpcbf" tool_path="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/bin/phpcs" />
+    </phpcs_settings>
   </component>
   <component name="PhpIncludePathManager">
     <include_path>
@@ -107,6 +115,11 @@
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/cli-parser" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/sebastian/comparator" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/masterminds/html5" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/almasaeed2010/adminlte" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/npm-asset/bootstrap" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/hail812/yii2-adminlte-widgets" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/hail812/yii2-adminlte3" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/yiisoft/yii2-bootstrap4" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
@@ -120,6 +133,11 @@
   <component name="PhpStanOptionsConfiguration">
     <option name="memoryLimit" value="-1" />
     <option name="transferred" value="true" />
+  </component>
+  <component name="PhpUnit">
+    <phpunit_settings>
+      <PhpUnitSettings custom_loader_path="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/autoload.php" />
+    </phpunit_settings>
   </component>
   <component name="PsalmOptionsConfiguration">
     <option name="transferred" value="true" />
