@@ -6,6 +6,8 @@ class m261029_221801_criar_tabelas_museu extends Migration
 {
     public function safeUp()
     {
+        $t = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4';
+
         // ---------- Tabelas base ----------
         $this->createTable('museu', [
             'id_museu' => $this->primaryKey(),
@@ -16,7 +18,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'preco' => $this->decimal(10, 2),
             'horario_abertura' => $this->time(),
             'horario_fecho' => $this->time(),
-        ]);
+        ], $t);
 
         $this->createTable('desconto', [
             'id_desconto' => $this->primaryKey(),
@@ -24,7 +26,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'percentagem' => $this->decimal(5, 2),
             'data_inicio' => $this->date(),
             'data_fim' => $this->date(),
-        ]);
+        ], $t);
 
         // ---------- Dependem de museu ----------
         $this->createTable('obra', [
@@ -33,7 +35,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'nome' => $this->string(150)->notNull(),
             'descricao' => $this->text(),
             'ano' => $this->integer(),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_obra_museu', 'obra', 'id_museu', 'museu', 'id_museu', 'CASCADE');
 
         $this->createTable('localizacao', [
@@ -41,7 +43,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'id_museu' => $this->integer()->notNull(),
             'latitude' => $this->decimal(10, 7),
             'longitude' => $this->decimal(10, 7),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_localizacao_museu', 'localizacao', 'id_museu', 'museu', 'id_museu', 'CASCADE');
 
         $this->createTable('lembranca', [
@@ -51,7 +53,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'descricao' => $this->text(),
             'preco' => $this->decimal(10, 2),
             'stock' => $this->integer()->defaultValue(0),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_lembranca_museu', 'lembranca', 'id_museu', 'museu', 'id_museu', 'CASCADE');
 
         $this->createTable('lotacao_hora', [
@@ -61,7 +63,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'hora' => $this->time()->notNull(),
             'lotacao_maxima' => $this->integer()->notNull(),
             'lugares_ocupados' => $this->integer()->defaultValue(0),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_lotacao_museu', 'lotacao_hora', 'id_museu', 'museu', 'id_museu', 'CASCADE');
 
         // ---------- Colaboradores ----------
@@ -72,7 +74,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'email' => $this->string(100)->notNull(),
             'password' => $this->string(255)->notNull(),
             'role' => $this->string(30),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_colaborador_museu', 'colaborador', 'id_museu', 'museu', 'id_museu', 'SET NULL');
 
         $this->createTable('turno', [
@@ -81,7 +83,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'data' => $this->date()->notNull(),
             'hora_inicio' => $this->time(),
             'hora_fim' => $this->time(),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_turno_colaborador', 'turno', 'id_colaborador', 'colaborador', 'id_colaborador', 'CASCADE');
 
         $this->createTable('verificacao_diaria', [
@@ -91,11 +93,11 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'data' => $this->date()->notNull(),
             'descricao' => $this->text(),
             'estado' => $this->string(30),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_verificacao_colaborador', 'verificacao_diaria', 'id_colaborador', 'colaborador', 'id_colaborador', 'CASCADE');
         $this->addForeignKey('fk_verificacao_museu', 'verificacao_diaria', 'id_museu', 'museu', 'id_museu', 'CASCADE');
 
-        // ---------- Bilhetes e visitas (ligados à tabela user) ----------
+        // ---------- Bilhetes e visitas (ligados a user) ----------
         $this->createTable('bilhete', [
             'id_bilhete' => $this->primaryKey(),
             'id_utilizador' => $this->integer()->notNull(),
@@ -105,7 +107,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'hora_visita' => $this->time(),
             'preco' => $this->decimal(10, 2),
             'estado' => $this->string(30),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_bilhete_user', 'bilhete', 'id_utilizador', '{{%user}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_bilhete_museu', 'bilhete', 'id_museu', 'museu', 'id_museu', 'CASCADE');
         $this->addForeignKey('fk_bilhete_desconto', 'bilhete', 'id_desconto', 'desconto', 'id_desconto', 'SET NULL');
@@ -116,7 +118,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'id_museu' => $this->integer()->notNull(),
             'id_bilhete' => $this->integer()->notNull(),
             'data_visita' => $this->date(),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_visita_user', 'visita', 'id_utilizador', '{{%user}}', 'id', 'CASCADE');
         $this->addForeignKey('fk_visita_museu', 'visita', 'id_museu', 'museu', 'id_museu', 'CASCADE');
         $this->addForeignKey('fk_visita_bilhete', 'visita', 'id_bilhete', 'bilhete', 'id_bilhete', 'CASCADE');
@@ -128,7 +130,7 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'data_encomenda' => $this->date(),
             'estado' => $this->string(30),
             'total' => $this->decimal(10, 2),
-        ]);
+        ], $t);
         $this->addForeignKey('fk_encomenda_user', 'encomenda', 'id_utilizador', '{{%user}}', 'id', 'CASCADE');
 
         $this->createTable('encomenda_lembranca', [
@@ -136,13 +138,10 @@ class m261029_221801_criar_tabelas_museu extends Migration
             'id_lembranca' => $this->integer()->notNull(),
             'quantidade' => $this->integer()->notNull()->defaultValue(1),
             'preco_unitario' => $this->decimal(10, 2),
-        ]);
+        ], $t);
         $this->addPrimaryKey('pk_encomenda_lembranca', 'encomenda_lembranca', ['id_encomenda', 'id_lembranca']);
         $this->addForeignKey('fk_el_encomenda', 'encomenda_lembranca', 'id_encomenda', 'encomenda', 'id_encomenda', 'CASCADE');
         $this->addForeignKey('fk_el_lembranca', 'encomenda_lembranca', 'id_lembranca', 'lembranca', 'id_lembranca', 'CASCADE');
-
-
-
     }
 
     public function safeDown()
