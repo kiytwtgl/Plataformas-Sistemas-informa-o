@@ -3,122 +3,102 @@
 /** @var yii\web\View $this */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
-$this->title = 'InforMuseus';
+$this->title = 'InforMuseus — Descubra Museus e Monumentos';
 $this->params['fullWidth'] = true; // esta página gere os seus próprios containers
 
 // DADOS DE EXEMPLO: mais tarde isto vem da BD (controller -> view).
-// Imagens em web/img/museus/ (ilustrações); podes trocar por fotos reais com o mesmo nome
-$catalogo = [
-    ['nome' => 'Museu do Louvre', 'local' => 'Paris, França',   'img' => 'img/museus/louvre.jpg'],
-    ['nome' => 'Coliseu',         'local' => 'Roma, Itália',    'img' => 'img/museus/coliseu.jpg'],
-    ['nome' => 'Museu do Prado',  'local' => 'Madrid, Espanha', 'img' => 'img/museus/prado.jpg'],
+// Imagens em web/img/museus/ — podes trocar por fotos reais mantendo o nome do ficheiro.
+$destaques = [
+    ['nome' => 'Museu do Louvre',                'local' => 'Paris, França',   'img' => 'img/museus/louvre.jpg'],
+    ['nome' => 'Coliseu',                        'local' => 'Roma, Itália',    'img' => 'img/museus/coliseu.jpg'],
+    ['nome' => 'Museu do Prado',                 'local' => 'Madrid, Espanha', 'img' => 'img/museus/prado.jpg'],
+    ['nome' => 'Museu Nacional de Arte Antiga',  'local' => 'Lisboa, Portugal', 'img' => 'img/museus/mnaa.jpg'],
 ];
 
-$destaque = [
-    'nome'  => 'Museu Nacional de Arte Antiga',
-    'local' => 'Lisboa, Portugal',
-    'desc'  => 'Coleções que contam séculos de história, arte e cultura.',
-    'img'   => 'img/museus/mnaa.jpg',
+$categorias = [
+    ['',          'Todos',       'fa-th-large'],
+    ['museu',     'Museus',      'fa-university'],
+    ['monumento', 'Monumentos',  'fa-landmark'],
+    ['exposicao', 'Exposições',  'fa-image'],
 ];
+$tipoAtual = (string) Yii::$app->request->get('tipo', '');
+
+$this->registerJs(<<<'JS'
+document.querySelectorAll('.imh-fav').forEach(function (b) {
+    b.addEventListener('click', function () {
+        var on = b.classList.toggle('is-on');
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+});
+JS);
 ?>
 
-<!-- 1. Pesquisa e filtros -->
-<section class="im-search">
-    <div class="container">
-        <?= Html::beginForm(['/site/index'], 'get') ?>
-        <div class="im-search-row">
-            <label class="im-search-box">
-                <i class="fas fa-search"></i>
-                <input type="search" name="q"
-                       placeholder="Pesquisar museus, monumentos, cidades…"
-                       value="<?= Html::encode(Yii::$app->request->get('q')) ?>">
-            </label>
-            <button type="button" class="im-btn-gold" data-bs-toggle="collapse" data-bs-target="#imFiltros"
-                    aria-expanded="false" aria-controls="imFiltros">
-                Filtros <i class="fas fa-sliders-h ms-1"></i>
-            </button>
-        </div>
+<!-- Hero + pesquisa -->
+<section class="imh-hero" id="pesquisa">
+    <div class="imh-hero-bg" style="background-image:url('<?= Yii::getAlias('@web/img/museus/louvre.jpg') ?>')"></div>
+    <div class="im-container imh-hero-inner">
+        <h1>Descubra<br><span>Museus e Monumentos</span></h1>
+        <p>Explore, aprenda e viva a cultura.</p>
 
-        <div class="collapse" id="imFiltros">
-            <div class="im-filtros row g-2">
-                <div class="col-md-5">
-                    <select name="pais" class="form-select">
-                        <option value="">País</option>
-                        <option>Portugal</option>
-                        <option>Espanha</option>
-                        <option>França</option>
-                        <option>Itália</option>
-                    </select>
-                </div>
-                <div class="col-md-5">
-                    <select name="tipo" class="form-select">
-                        <option value="">Tipo</option>
-                        <option value="museu">Museu</option>
-                        <option value="monumento">Monumento</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="im-btn-gold w-100">Aplicar</button>
-                </div>
-            </div>
-        </div>
+        <?= Html::beginForm(['/site/index'], 'get', ['class' => 'imh-search', 'role' => 'search']) ?>
+            <i class="fas fa-search" aria-hidden="true"></i>
+            <input type="search" name="q" placeholder="Pesquisar museus, monumentos, exposições…"
+                   value="<?= Html::encode(Yii::$app->request->get('q')) ?>" aria-label="Pesquisar">
+            <?php if ($tipoAtual !== ''): ?><input type="hidden" name="tipo" value="<?= Html::encode($tipoAtual) ?>"><?php endif; ?>
+            <button type="submit">Pesquisar</button>
         <?= Html::endForm() ?>
     </div>
 </section>
 
-<div class="container">
-    <div class="im-panel">
+<div class="imh-page">
+    <!-- Categorias -->
+    <section class="im-container imh-tiles" aria-label="Categorias">
+        <?php foreach ($categorias as [$valor, $rotulo, $icone]): ?>
+            <a href="<?= Url::to(['/site/index', 'tipo' => $valor ?: null, '#' => 'espacos']) ?>"
+               class="imh-tile<?= $tipoAtual === $valor ? ' is-active' : '' ?>">
+                <i class="fas <?= $icone ?>" aria-hidden="true"></i>
+                <span><?= $rotulo ?></span>
+            </a>
+        <?php endforeach; ?>
+    </section>
 
-        <!-- 2. Catálogo internacional -->
-        <div class="row g-4">
-            <?php foreach ($catalogo as $m): ?>
-                <div class="col-md-4">
-                    <a href="#" class="im-card">
-                        <?= Html::img('@web/' . $m['img'], ['alt' => $m['nome']]) ?>
-                        <h3><?= Html::encode($m['nome']) ?></h3>
-                        <p><?= Html::encode($m['local']) ?></p>
+    <!-- Espaços em destaque -->
+    <section class="im-container imh-section" id="espacos">
+        <div class="imh-section-head">
+            <h2>Espaços em destaque</h2>
+            <a href="<?= Url::to(['/site/index', '#' => 'espacos']) ?>" class="imh-see-all">Ver todos <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+
+        <div class="imh-grid">
+            <?php foreach ($destaques as $m): ?>
+                <article class="imh-card">
+                    <a href="#" class="imh-card-img">
+                        <?= Html::img('@web/' . $m['img'], ['alt' => $m['nome'], 'loading' => 'lazy']) ?>
                     </a>
-                </div>
+                    <div class="imh-card-body">
+                        <div>
+                            <h3><?= Html::encode($m['nome']) ?></h3>
+                            <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> <?= Html::encode($m['local']) ?></p>
+                        </div>
+                        <button type="button" class="imh-fav" aria-pressed="false" aria-label="Guardar nos favoritos">
+                            <i class="far fa-heart" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </article>
             <?php endforeach; ?>
         </div>
+    </section>
 
-        <!-- 3. Preview do espaço -->
-        <article class="im-feature row g-0">
-            <div class="col-md-6">
-                <?= Html::img('@web/' . $destaque['img'], ['alt' => $destaque['nome']]) ?>
-            </div>
-            <div class="col-md-6 im-feature-body">
-                <h2><?= Html::encode($destaque['nome']) ?></h2>
-                <div class="im-local"><i class="fas fa-map-marker-alt"></i> <?= Html::encode($destaque['local']) ?></div>
-                <p><?= Html::encode($destaque['desc']) ?></p>
-                <a href="#" class="im-link">Ver detalhes</a>
-            </div>
-        </article>
-
-        <!-- 4. Bilhetes e lembranças -->
-        <div class="row g-4 mt-1">
-            <div class="col-md-6" id="bilhetes">
-                <a href="#" class="im-action">
-                    <div class="im-action-icon navy"><i class="fas fa-ticket-alt"></i></div>
-                    <div class="im-action-body">
-                        <h3>Bilhetes</h3>
-                        <p>Compre bilhetes<br>para exposições.</p>
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-6" id="lembrancas">
-                <a href="#" class="im-action">
-                    <div class="im-action-icon gold"><i class="fas fa-shopping-bag"></i></div>
-                    <div class="im-action-body">
-                        <h3>Lembranças</h3>
-                        <p>Descubra recordações<br>exclusivas.</p>
-                        <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+    <!-- Banner exposições -->
+    <section class="im-container imh-banner-wrap" id="exposicoes">
+        <div class="imh-banner" style="background-image:url('<?= Yii::getAlias('@web/img/museus/coliseu.jpg') ?>')">
+            <div class="imh-banner-text">
+                <h2>Uma viagem pela história</h2>
+                <p>Descubra exposições temporárias em diferentes museus e monumentos do mundo.</p>
+                <a href="#" class="imh-btn-gold">Ver exposições <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
             </div>
         </div>
-
-    </div>
+    </section>
 </div>
