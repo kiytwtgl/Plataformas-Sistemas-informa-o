@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace frontend\controllers;
 
-use common\models\LoginForm;
 use frontend\models\ContactForm;
+use frontend\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\ResetPasswordForm;
@@ -107,7 +107,7 @@ class SiteController extends Controller
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->goHome();
         }
 
         $model->password = '';
@@ -177,17 +177,20 @@ class SiteController extends Controller
      */
     public function actionSignup(): string|Response
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         $model = new SignupForm();
 
-        $signed = $model->load(Yii::$app->request->post()) && $model->signup(
-            $this->mailer,
-            Yii::$app->params['supportEmail'],
-            Yii::$app->name,
-        );
+        if ($model->load(Yii::$app->request->post())) {
+            $user = $model->signup();
+            if ($user !== null) {
+                Yii::$app->user->login($user);
+                Yii::$app->session->setFlash('success', 'Conta criada com sucesso. Bem-vindo ao InforMuseus!');
 
-        if ($signed) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
-            return $this->goHome();
+                return $this->goHome();
+            }
         }
 
         return $this->render('signup', [

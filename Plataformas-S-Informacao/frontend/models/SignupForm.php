@@ -7,85 +7,70 @@ namespace frontend\models;
 use common\models\User;
 use Yii;
 use yii\base\Model;
-use yii\mail\MailerInterface;
 
 /**
- * Signup form
+ * Registo de visitante: Nome, Email, Nº de telefone e Password.
+ * A conta fica ativa e o utilizador é autenticado logo a seguir (ver SiteController::actionSignup).
  */
 class SignupForm extends Model
 {
-    public string $username = '';
+    public string $nome = '';
     public string $email = '';
+    public string $telefone = '';
     public string $password = '';
-    /**
-     * {@inheritdoc}
-     */
+
     public function rules(): array
     {
+        $min = (int) (Yii::$app->params['user.passwordMinLength'] ?? 8);
+
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => User::class, 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            [['nome', 'email', 'telefone', 'password'], 'required', 'message' => 'Preencha este campo.'],
+
+            ['nome', 'trim'],
+            ['nome', 'string', 'min' => 2, 'max' => 100, 'tooShort' => 'O nome deve ter pelo menos {min} caracteres.', 'tooLong' => 'O nome é demasiado longo.'],
 
             ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
+            ['email', 'filter', 'filter' => 'strtolower'],
+            ['email', 'email', 'message' => 'Introduza um email válido.'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => User::class, 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => User::class, 'targetAttribute' => 'email', 'message' => 'Este email já está registado.'],
 
-            ['password', 'required'],
-            ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            ['telefone', 'trim'],
+            ['telefone', 'match', 'pattern' => '/^\+?[0-9 ]{9,15}$/', 'message' => 'Introduza um número de telefone válido.'],
+
+            ['password', 'string', 'min' => $min, 'tooShort' => 'A password deve ter pelo menos {min} caracteres.'],
+            ['password', 'match', 'pattern' => '/^(?=.*[A-Za-z])(?=.*\d).+$/', 'message' => 'A password deve incluir letras e números.'],
+        ];
+    }
+
+    public function attributeLabels(): array
+    {
+        return [
+            'nome' => 'Nome',
+            'email' => 'Email',
+            'telefone' => 'Nº de telefone',
+            'password' => 'Password',
         ];
     }
 
     /**
-     * Signs user up.
-     *
-     * @param MailerInterface $mailer the mailer component.
-     * @param string $supportEmail the support email address.
-     * @param string $appName the application name.
-     *
-     * @return bool|null whether the creating new account was successful and email was sent.
+     * Cria o utilizador (ativo) e devolve-o, ou null se a validação/gravação falhar.
      */
-    public function signup(MailerInterface $mailer, string $supportEmail, string $appName): bool|null
+    public function signup(): ?User
     {
         if (!$this->validate()) {
             return null;
         }
 
         $user = new User();
-
-        $user->username = $this->username;
+        $user->username = $this->email; // o username interno é o email (único)
+        $user->nome = $this->nome;
         $user->email = $this->email;
-
+        $user->telefone = preg_replace('/\s+/', '', $this->telefone);
+        $user->status = User::STATUS_ACTIVE;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
 
-        return $user->save() && $this->sendEmail($mailer, $user, $supportEmail, $appName);
-    }
-
-    /**
-     * Sends confirmation email to user.
-     *
-     * @param MailerInterface $mailer the mailer component.
-     * @param User $user user model to which the email should be sent.
-     * @param string $supportEmail the support email address.
-     * @param string $appName the application name.
-     *
-     * @return bool whether the email was sent.
-     */
-    protected function sendEmail(MailerInterface $mailer, User $user, string $supportEmail, string $appName): bool
-    {
-        return $mailer
-            ->compose(
-                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                ['user' => $user],
-            )
-            ->setFrom([$supportEmail => $appName . ' robot'])
-            ->setTo($this->email)
-            ->setSubject('Account registration at ' . $appName)
-            ->send();
+        return $user->save() ? $user : null;
     }
 }
