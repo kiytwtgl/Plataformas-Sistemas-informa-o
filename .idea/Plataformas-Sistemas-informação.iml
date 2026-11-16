@@ -10,6 +10,11 @@
       <sourceFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/frontend/tests" isTestSource="true" packagePrefix="frontend\tests\" />
       <sourceFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/frontend/tests/Support" isTestSource="true" packagePrefix="frontend\tests\" />
       <sourceFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/vendor/almasaeed2010/adminlte" />
+      <excludeFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/vendor/hail812/yii2-adminlte-widgets" />
+      <excludeFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/vendor/hail812/yii2-adminlte3" />
+      <excludeFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/vendor/npm-asset/bootstrap" />
+      <excludeFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/vendor/yiisoft/yii2-bootstrap4" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
