@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/frontend/tests" isTestSource="true" packagePrefix="frontend\tests\" />
       <sourceFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/frontend/tests/Support" isTestSource="true" packagePrefix="frontend\tests\" />
       <sourceFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/Plataformas-S-Informacao/vendor/theseer/tokenizer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

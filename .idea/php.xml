@@ -119,6 +119,7 @@
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/hail812/yii2-adminlte-widgets" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/hail812/yii2-adminlte3" />
       <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/yiisoft/yii2-bootstrap4" />
+      <path value="$PROJECT_DIR$/Plataformas-S-Informacao/vendor/theseer/tokenizer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
