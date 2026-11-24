@@ -24,6 +24,8 @@ class Museu extends ActiveRecord
             [['telefone'], 'string', 'max' => 30],
             [['email'], 'string', 'max' => 120],
             [['email'], 'email'],
+            [['estado'], 'default', 'value' => 1],
+            [['estado'], 'boolean'],
         ];
     }
 
@@ -41,5 +43,9 @@ class Museu extends ActiveRecord
             'telefone' => 'Telefone',
             'email' => 'Email',
         ];
+    }
+    public function getLocalizacao()
+    {
+        return $this->hasOne(Localizacao::class, ['id_museu' => 'id_museu']);
     }
 }
