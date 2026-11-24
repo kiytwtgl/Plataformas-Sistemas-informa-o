@@ -165,3 +165,235 @@
   .imh-footer-grid{grid-template-columns:1fr;gap:30px}
   .imh-footer-bottom-inner{flex-direction:column;align-items:flex-start}
 }
+
+
+/* =========================================
+   US13 - CONSULTAR INFORMAÇÃO
+   ========================================= */
+
+.imh-info-hero {
+    background: var(--im-navy);
+    color: #fff;
+    padding: 55px 0 65px;
+    border-bottom: 4px solid var(--im-gold);
+}
+
+.imh-info-hero-inner {
+    max-width: 1100px;
+}
+
+.imh-info-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 38px;
+    color: rgba(255,255,255,.75);
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.imh-info-back:hover {
+    color: var(--im-gold-light);
+}
+
+.imh-info-kicker {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--im-gold-light);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+}
+
+.imh-info-hero h1 {
+    margin: 0;
+    color: #fff;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.1;
+}
+
+.imh-info-hero p {
+    margin: 17px 0 0;
+    color: rgba(255,255,255,.75);
+    font-size: 14px;
+}
+
+.imh-info-hero p i {
+    margin-right: 8px;
+    color: var(--im-gold);
+}
+
+.imh-info-content {
+    max-width: 1100px;
+    padding-top: 42px;
+    padding-bottom: 70px;
+}
+
+.imh-info-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.imh-info-main,
+.imh-info-sidebar {
+    display: grid;
+    gap: 24px;
+}
+
+.imh-info-card {
+    padding: 30px;
+    border: 1px solid var(--im-line);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 8px 25px rgba(16,43,69,.04);
+}
+
+.imh-info-label {
+    display: block;
+    margin-bottom: 12px;
+    color: var(--im-gold-dark);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .2em;
+}
+
+.imh-info-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0 0 22px;
+    color: var(--im-navy);
+    font-size: 25px;
+}
+
+.imh-info-card h2 i {
+    color: var(--im-gold-dark);
+    font-size: 21px;
+}
+
+.imh-info-description {
+    margin: 0;
+    color: rgba(16,43,69,.78);
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.imh-info-muted {
+    margin: 12px 0 0;
+    color: var(--im-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.imh-info-detail {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 21px;
+}
+
+.imh-info-detail > i {
+    width: 20px;
+    margin-top: 3px;
+    color: var(--im-gold-dark);
+    text-align: center;
+}
+
+.imh-info-detail strong,
+.imh-info-hours strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--im-navy);
+    font-size: 13px;
+}
+
+.imh-info-detail p,
+.imh-info-hours p {
+    margin: 0;
+    color: var(--im-muted);
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.imh-info-detail a {
+    color: var(--im-navy);
+    text-decoration: none;
+}
+
+.imh-info-detail a:hover {
+    color: var(--im-gold-dark);
+}
+
+.imh-info-hours {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    background: var(--im-cream);
+    border-left: 3px solid var(--im-gold);
+}
+
+.imh-info-hours > i {
+    color: var(--im-gold-dark);
+    font-size: 20px;
+}
+
+.imh-info-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 17px;
+    background: var(--im-navy);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: .2s;
+}
+
+.imh-info-button:hover {
+    background: var(--im-gold);
+    color: var(--im-navy);
+}
+
+.imh-info-update {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    padding: 17px 20px;
+    border: 1px solid var(--im-line);
+    border-radius: 8px;
+    color: var(--im-muted);
+    font-size: 12px;
+}
+
+.imh-info-update i {
+    color: var(--im-gold-dark);
+}
+
+@media(max-width:767.98px) {
+    .imh-info-hero {
+        padding: 35px 0 45px;
+    }
+
+    .imh-info-back {
+        margin-bottom: 28px;
+    }
+
+    .imh-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .imh-info-card {
+        padding: 23px;
+    }
+
+    .imh-info-card h2 {
+        font-size: 22px;
+    }
+}

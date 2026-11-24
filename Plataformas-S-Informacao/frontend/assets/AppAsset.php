@@ -10,11 +10,11 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
 
     public $css = [
-        'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap',
-        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css',
-        'css/bootstrap.min.css',   // bootstrap do template Hotelier
-        'css/informuseus.css',     // estilos do InforMuseus (vem depois para sobrepor)
-    ];
+    'https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css',
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css',
+    'css/informuseus.css',
+];
 
     public $js = [
         'https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js',

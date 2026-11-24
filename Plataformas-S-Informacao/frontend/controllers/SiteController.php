@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace frontend\controllers;
 
+use common\models\LoginForm;
 use frontend\models\ContactForm;
-use frontend\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\ResetPasswordForm;
@@ -20,6 +20,7 @@ use yii\mail\MailerInterface;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ErrorAction;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 /**
@@ -90,7 +91,43 @@ class SiteController extends Controller
      */
     public function actionIndex(): string
     {
-        return $this->render('index');
+        // O catálogo é carregado diretamente da base de dados.
+        $museus = Yii::$app->db->createCommand("
+            SELECT m.id_museu, m.nome, m.tipo, m.descricao, m.morada,
+                   m.horario_abertura, m.horario_fecho
+            FROM museu m
+            ORDER BY m.nome ASC
+        ")->queryAll();
+
+        return $this->render('index', [
+            'museus' => $museus,
+        ]);
+    }
+
+    /**
+     * Apresenta a informação detalhada de um museu ou monumento.
+     */
+    public function actionInformacao(int $id): string
+    {
+        $museu = Yii::$app->db->createCommand("
+            SELECT m.id_museu, m.nome, m.tipo, m.descricao, m.morada,
+                   m.telefone, m.email, m.preco,
+                   m.horario_abertura, m.horario_fecho,
+                   l.latitude, l.longitude
+            FROM museu m
+            LEFT JOIN localizacao l ON l.id_museu = m.id_museu
+            WHERE m.id_museu = :id
+            ORDER BY l.id_localizacao ASC
+            LIMIT 1
+        ")->bindValue(':id', $id)->queryOne();
+
+        if ($museu === false) {
+            throw new NotFoundHttpException('O museu ou monumento que procura não existe.');
+        }
+
+        return $this->render('informacao', [
+            'museu' => $museu,
+        ]);
     }
 
     /**
@@ -107,7 +144,7 @@ class SiteController extends Controller
         $model = new LoginForm();
 
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goHome();
+            return $this->goBack();
         }
 
         $model->password = '';
@@ -177,20 +214,17 @@ class SiteController extends Controller
      */
     public function actionSignup(): string|Response
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
         $model = new SignupForm();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $user = $model->signup();
-            if ($user !== null) {
-                Yii::$app->user->login($user);
-                Yii::$app->session->setFlash('success', 'Conta criada com sucesso. Bem-vindo ao InforMuseus!');
+        $signed = $model->load(Yii::$app->request->post()) && $model->signup(
+            $this->mailer,
+            Yii::$app->params['supportEmail'],
+            Yii::$app->name,
+        );
 
-                return $this->goHome();
-            }
+        if ($signed) {
+            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            return $this->goHome();
         }
 
         return $this->render('signup', [
