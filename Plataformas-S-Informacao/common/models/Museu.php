@@ -2,48 +2,18 @@
 
 namespace common\models;
 
-use Yii;
+use yii\db\ActiveRecord;
 
-/**
- * This is the model class for table "museu".
- *
- * @property int $id_museu
- * @property string $nome
- * @property string|null $tipo
- * @property string|null $descricao
- * @property string|null $morada
- * @property float|null $preco
- * @property string|null $horario_abertura
- * @property string|null $horario_fecho
- *
- * @property Bilhete[] $bilhetes
- * @property Colaborador[] $colaboradors
- * @property Lembranca[] $lembrancas
- * @property Localizacao[] $localizacaos
- * @property LotacaoHora[] $lotacaoHoras
- * @property Obra[] $obras
- * @property VerificacaoDiaria[] $verificacaoDiarias
- * @property Visita[] $visitas
- */
-class Museu extends \yii\db\ActiveRecord
+class Museu extends ActiveRecord
 {
-
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'museu';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            [['tipo', 'descricao', 'morada', 'preco', 'horario_abertura', 'horario_fecho'], 'default', 'value' => null],
             [['nome'], 'required'],
             [['descricao'], 'string'],
             [['preco'], 'number'],
@@ -51,104 +21,31 @@ class Museu extends \yii\db\ActiveRecord
             [['nome'], 'string', 'max' => 100],
             [['tipo'], 'string', 'max' => 50],
             [['morada'], 'string', 'max' => 200],
+            [['telefone'], 'string', 'max' => 30],
+            [['email'], 'string', 'max' => 120],
+            [['email'], 'email'],
+            [['estado'], 'default', 'value' => 1],
+            [['estado'], 'boolean'],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
-            'id_museu' => 'Id Museu',
+            'id_museu' => 'ID',
             'nome' => 'Nome',
             'tipo' => 'Tipo',
-            'descricao' => 'Descricao',
+            'descricao' => 'Descrição',
             'morada' => 'Morada',
-            'preco' => 'Preco',
-            'horario_abertura' => 'Horario Abertura',
-            'horario_fecho' => 'Horario Fecho',
+            'preco' => 'Preço',
+            'horario_abertura' => 'Horário de abertura',
+            'horario_fecho' => 'Horário de fecho',
+            'telefone' => 'Telefone',
+            'email' => 'Email',
         ];
     }
-
-    /**
-     * Gets query for [[Bilhetes]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getBilhetes()
+    public function getLocalizacao()
     {
-        return $this->hasMany(Bilhete::class, ['id_museu' => 'id_museu']);
+        return $this->hasOne(Localizacao::class, ['id_museu' => 'id_museu']);
     }
-
-    /**
-     * Gets query for [[Colaboradors]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getColaboradors()
-    {
-        return $this->hasMany(Colaborador::class, ['id_museu' => 'id_museu']);
-    }
-
-    /**
-     * Gets query for [[Lembrancas]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLembrancas()
-    {
-        return $this->hasMany(Lembranca::class, ['id_museu' => 'id_museu']);
-    }
-
-    /**
-     * Gets query for [[Localizacaos]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLocalizacaos()
-    {
-        return $this->hasMany(Localizacao::class, ['id_museu' => 'id_museu']);
-    }
-
-    /**
-     * Gets query for [[LotacaoHoras]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getLotacaoHoras()
-    {
-        return $this->hasMany(LotacaoHora::class, ['id_museu' => 'id_museu']);
-    }
-
-    /**
-     * Gets query for [[Obras]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getObras()
-    {
-        return $this->hasMany(Obra::class, ['id_museu' => 'id_museu']);
-    }
-
-    /**
-     * Gets query for [[VerificacaoDiarias]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getVerificacaoDiarias()
-    {
-        return $this->hasMany(VerificacaoDiaria::class, ['id_museu' => 'id_museu']);
-    }
-
-    /**
-     * Gets query for [[Visitas]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getVisitas()
-    {
-        return $this->hasMany(Visita::class, ['id_museu' => 'id_museu']);
-    }
-
 }
